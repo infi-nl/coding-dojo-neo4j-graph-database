@@ -119,7 +119,35 @@ RETURN p,m
 All this new syntax might be a bit overwhelming. But it's just syntax, so don't worry! Here's a neat little picture which summerizes the basic elements of cypher query. *Make sure you understand all aspects before you continue* and feel free to ask us for extra explanation.
 ![cypher-example](cypher-example.png)
 
-### Try it yourself
-Open the sandbox
+## Try it yourself
+Let's get our hands dirty now! Open a new movie db sandbox on [sandbox environment](https://sandbox.neo4j.com/).
 
-TODO assignments
+This is a simple graph database filled with some example data to get us started.
+
+### 1. How many are there?
+Let's explore this database a bit. Can you find out how many movies, actors and reviewers there are in this data-set? 
+
+Tip: make use of the labels and relationship types. 
+
+### 2. Who acted in The Matrix?
+Can you query all the actors that played in The Matrix?
+
+Tip: use the title property on the Movie nodes. When you query all movies and hover over them you'll see the properties at the bottom of the query result.
+
+
+If you succeeded you might want to find out which other people were involved with The Matrix.
+
+Tip: instead of returning specific variables, you can also use a wildcard: `RETURN *`
+
+### 3. Who's Eddie?
+This one is a bit tricky! 
+
+Please find out which actor played Eddie and in which movie.
+
+Note that relationships can have properties as well, just as nodes. In this case we need to lookup the roles property (Which is an array by the way! Who's `['Eddie']`?)
+
+
+### 4. Act like you know how(ard)
+Can you find out which actors played in movies directed by Ron Howard?
+
+Tip: `()-[]->()<-[]-()`
