@@ -19,7 +19,7 @@ You can find more detailed information at the Neo4j website: https://neo4j.com/d
 	
 ### What do we expect from you?
 Not much! 
-
+explaination
 - But at least a basic understanding about databases.
 - Make sure you've a Neo4j account so you can use the free [sandbox environment](https://sandbox.neo4j.com/)
 - If you want to get started with building a node/C# you'll need an environment (**TODO**).
@@ -58,19 +58,65 @@ Nodes are defined by parenthesis `()` and relationships by arrows `-->`
 
 These can get a little more complex later on, but you'll always recognize these two based on their form in the query.
 
+**A simple query**
+
 A very simple query could look like this:  
+
 ```
 MATCH (n1)-->(n2)
 RETURN n1, n2  
 ```
-This will return all nodes that have a relationship which each other. Fun, but not verry useful.
+
+This will return all nodes that have a relationship which each other. Fun, but not very useful.
+
+
+**Query by property**
+
 In the real world you'd probably want to specify things a little bit more.
 
-TODO query with properties.
+```
+MATCH (n1{id: 7})-->(n2)  
+Return n2
+```
 
-TODO query with properties and labels
+This will return all related nodes for the node with id 7. You can limit your query based on every property or properties a node has. e.g.:
 
-TODO overview  
+```  
+MATCH (n1{age: 7, city: Amsterdam})-->(n2)  
+Return n2
+```
+
+
+**Query by label**
+
+Besides properties, nodes can have labels. These are a bit similar to table names in a sql database. We can use them categorize the different entities in our database. For instance:
+```
+MATCH (p:Person)-->(b:Book)
+RETURN p,b
+```
+This will return all relationships between persons and books.
+
+**Query by relationship**
+
+We know how to query relationships between certain object now. But we've no clue what the nature of this relationship is. Fortunately we can also specify the type of relationship in our query.
+
+```
+MATCH (p:Person)-[:LOVES]->(m:Movie)
+RETURN p,m
+```
+
+OR
+
+
+```
+MATCH (p:Person)-[:HATES]->(m:Movie)
+RETURN p,m
+```
+
+
+**Summary**
+
+All this new syntax might be a bit overwhelming. But it's just syntax, so don't worry! Here's a neat little picture which summerizes the basic elements of cypher query. *Make sure you understand all aspects before you continue* and feel free to ask us for extra explanation.
 ![cypher-example](cypher-example.png)
 
 ### Try it yourself
