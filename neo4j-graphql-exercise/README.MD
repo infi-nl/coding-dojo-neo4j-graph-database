@@ -12,9 +12,9 @@ Context will be a simple todo api, with Persons and Projects.
 Extend the type def with a Project Type and according relationship
 
 ### Exercise 2:
-Add a Todo through running a graphql mutation in the apollo sandbox server (apollo)
-Add a Person
 Add a Project
+Add a Person
+Add a Todo through running a graphql mutation in the apollo sandbox server (apollo)
 Complete a todo
 
 ### Exercise 3:
@@ -24,3 +24,53 @@ query a list that would provide you with the necessary information to create a t
 ## Resources used when crafting the dojo:
 - [Type Definitions](https://neo4j.com/docs/graphql-manual/current/type-definitions/)
 - [Relationship](https://neo4j.com/docs/graphql-manual/current/type-definitions/relationships/)
+- [Mutations](https://neo4j.com/docs/graphql-manual/current/mutations/)
+
+
+
+### Scratch queries
+
+```graphql
+
+query GetAllTodos {
+  todos {
+    description
+  }
+}
+mutation CreatePerson($createPeopleInput2: [PersonCreateInput!]!) {
+  createPeople(input: $createPeopleInput2) {
+    people {
+      name
+    }
+  }
+}
+query GetProjects {
+  projects {
+    name
+  }
+}
+mutation($input: [ProjectCreateInput!]!) {
+  createProjects(input: $input) {
+    projects {
+      name
+    }
+  }
+}
+
+ mutation {
+   createTodos(input: [
+       {
+         status: false
+         description: "Todo 1"
+
+      }
+
+   ]){
+     todos {
+       description
+     }
+   }
+ }
+
+
+```
