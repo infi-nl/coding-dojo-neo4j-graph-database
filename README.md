@@ -125,9 +125,49 @@ Let's get our hands dirty now! Open a new movie db sandbox on [sandbox environme
 This is a simple graph database filled with some example data to get us started.
 
 ### 1. How many are there?
-Let's explore this database a bit. Can you find out how many movies, actors and reviewers there are in this data-set? 
+Let's explore this database a bit. 
 
-Tip: make use of the labels and relationship types. 
+**How many movies?**
+Let's find out how many movies there are. We'll use the count function:
+
+```
+MATCH (movies:Movie)  
+RETURN count(movies)
+```
+
+**How many actors?**
+
+That was easy!
+Now we'd like to find out how many actors there are. So we need to expand our MATCH statement:
+```
+MATCH (actors:Person)-[:ACTED_IN]->(:Movie)
+```
+
+Nice! Now we know there are 102 actors!
+Or... wait. Did you get 172?
+
+The sandbox graph ui hides the fact that you query every `ACTED_IN` relation for every actor and movie combination. To prove this run the following query and open the text view of the query result (on the left side).
+
+```
+MATCH (actors:Person)-[:ACTED_IN]->(movies:Movie)  
+RETURN actors, movies
+```
+
+Every relation is queried, and thus counted! Just like a `JOIN` in SQL.
+
+The fix is easy, use the DISTINCT keyword: `RETURN count(DISTINCT actors)`. Now it should return 102.
+
+**Keep on going!**
+
+Can you find out how many directors, writers and reviewers there are? 
+
+Tip: you can query all relationship types like this:  
+
+```
+MATCH ()-[r]->()  
+RETURN DISTINCT type( r)
+```
+
 
 ### 2. Who acted in The Matrix?
 Can you query all the actors that played in The Matrix?
@@ -144,10 +184,26 @@ This one is a bit tricky!
 
 Please find out which actor played Eddie and in which movie.
 
-Note that relationships can have properties as well, just as nodes. In this case we need to lookup the roles property (Which is an array by the way! Who's `['Eddie']`?)
+Note that relationships can have properties as well, just as nodes. In this case we need to lookup the roles property (Which is an array by the way! Who = `['Eddie']`?)
 
 
 ### 4. Act like you know how(ard)
 Can you find out which actors played in movies directed by Ron Howard?
 
 Tip: `()-[]->()<-[]-()`
+
+### 5. CrUD
+We've matched (read) some things now. But we'd like to give you a quick introduction in how you can create, update and delete entities in Neo4j.
+
+**Create all the things**
+Add the movie "Django Unchained" to the database. Instead of the `MATCH` keyword, you need to use the `CREATE` keyword. Don't return anything.
+
+You can also create relationships with the same syntax as you've used with `MATCH`.
+Let's add "Quentin Tarantino" as the director. Mind the direction of the relationship. In this database the relations go from persons to movies. Try it!
+
+You can create multiple nodes and relationships with the `CREATE` keyword. But you'll get an error if you try to create existing nodes. In this case we need to `MATCH` our movie first and create the director and relationship on that matched movie. Try it!
+
+This can be cumbersome at times, in which case the `MERGE` statement is a good replacement for `CREATE`. It functions as a upsert method, meaning it'll create non existing entities an matches existing entities. Please add the actor Jamie Fox to this movie using the `MERGE` statement only.
+
+**Update entities**
+TODO
