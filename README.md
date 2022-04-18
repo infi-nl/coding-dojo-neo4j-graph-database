@@ -183,9 +183,9 @@ Save this query somewhere for later
 
 ### 3. Reviewer recommendations: similar movie ratings
 
-Find out which reviewer gives the most similar movie ratings to you. Please return the first 10 results for this one too. You don't have to take the count of reviewed movies into account.
+Find out which reviewer gives the most similar movie ratings to you. Please return the first 10 results for this one too. Save this query somewhere for later
 
-Tip: save this query somewhere for later
+If you want to give some weight to the count of reviewed movies you could roll your own averaging function using `sum()` and `count()`. Otherwise, just use `avg()`
 
 ### 4. Reviewer recommendations: similar age
 
@@ -201,8 +201,46 @@ From recommending reviewers to recommending movies. Please find the ten best rat
 
 First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based on the mapping you can find [here](/movie-genres.json).
 
-Then write a query that returns the 10 best rated movies for the genre you like best.
+Run
 
-### 7. Recommendations: use a similarity algorithm
+```
+CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/feature/recommendations/movie-genres.json?token=GHSAT0AAAAAABPKD3ICS35FT2FSYE7AWPPUYS37MSQ")
+YIELD value
+MATCH (m:Movie {title: value.title})
+UNWIND value.genre as genre
+MERGE (g:Genre {name: genre})
+MERGE (m)-[:IN_GENRE]->(g)
+RETURN m,g
+```
 
-Now let's combine the reviewer recommendation queries from above into one monster. Try to write a query that gives you recommended reviewers to start following based on reviewers you know through reviewers you're following, movie ratings and age. Use the [Jaccard similarity](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/) algorithm.
+Now write a query that returns the 10 best rated movies for the genre you like best. Like in exercise 3 you can use `avg()` or write an average function yourself.
+
+### 7. Recommendations: Pearson algorithm
+
+Let's work with another dataset that enables us to use the Graph Data Science library. Open a new [sandbox](https://sandbox.neo4j.com/) named "Recommendations". It's similar to the movie dataset we have been using.
+
+Now try to find users (nodeLabel: `Users`) most similar to "Cynthia Freeman" based on their movie ratings (relationshipType: `RATED`). But this time use the [`gds.similarity.pearson` algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/). This algorithm is particularly well-suited for product recommendations because it takes into account the fact that different users will have different mean ratings: on average some users will tend to give higher ratings than others. Since Pearson similarity considers differences about the mean, this metric will account for these discrepancies.
+
+### 8. Recommendations: Similar movies based on multiple criteria
+
+Now let's find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.
+
+First you'll have to use the Graph Data Science library to normalize these properties. Otherwise one property could have more weight in the similarity algorithm. Run the following queries sequentially to normalize the properties.
+
+```
+CALL gds.graph.project("movieGraph", [{Movie: {properties: ["budget", "imdbRating", "revenue", "year"]}}], "*")
+```
+
+```
+CALL gds.alpha.scaleProperties.mutate("movieGraph", {nodeProperties: ["budget", "imdbRating", "revenue", "year"], scaler: "MinMax", mutateProperty: "scaledProperties"})
+YIELD nodePropertiesWritten
+```
+
+```
+CALL gds.graph.writeNodeProperties("movieGraph", ["scaledProperties"])
+```
+
+Note that you can change the scaler and choose one depending on the distribution of your data.
+If all went well you will have created a scaledProperties property on the Movie node. Go and see what it looks like.
+
+Now you can actually write the query. Use the [gds.similarity.euclideanDistance algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/) to find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.
