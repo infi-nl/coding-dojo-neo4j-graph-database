@@ -34,7 +34,6 @@ explaination
 - A casual environment where learning and programming is a core theme;
 - We're by no means experts on the subject, but we've done some research in order to give you this dojo. We'd like to share our thoughts and experiences with you.
 
-
 ## Basic concepts and queries
 
 Graph databases have no concepts of tables, records or foreign keys. Instead labels, nodes and relationships are uses which resemble these concepts somewhat. Let's take a look at them:
@@ -128,13 +127,14 @@ Let's get our hands dirty now! Open a new movie db sandbox on [sandbox environme
 This is a simple graph database filled with some example data to get us started.
 
 ### 1. How many are there?
-Let's explore this database a bit. 
+
+Let's explore this database a bit.
 
 **How many movies?**
 Let's find out how many movies there are. We'll use the count function:
 
 ```
-MATCH (movies:Movie)  
+MATCH (movies:Movie)
 RETURN count(movies)
 ```
 
@@ -142,6 +142,7 @@ RETURN count(movies)
 
 That was easy!
 Now we'd like to find out how many actors there are. So we need to expand our MATCH statement:
+
 ```
 MATCH (actors:Person)-[:ACTED_IN]->(:Movie)
 ```
@@ -152,7 +153,7 @@ Or... wait. Did you get 172?
 The sandbox graph ui hides the fact that you query every `ACTED_IN` relation for every actor and movie combination. To prove this run the following query and open the text view of the query result (on the left side).
 
 ```
-MATCH (actors:Person)-[:ACTED_IN]->(movies:Movie)  
+MATCH (actors:Person)-[:ACTED_IN]->(movies:Movie)
 RETURN actors, movies
 ```
 
@@ -162,12 +163,12 @@ The fix is easy, use the DISTINCT keyword: `RETURN count(DISTINCT actors)`. Now 
 
 **Keep on going!**
 
-Can you find out how many directors, writers and reviewers there are? 
+Can you find out how many directors, writers and reviewers there are?
 
-Tip: you can query all relationship types like this:  
+Tip: you can query all relationship types like this:
 
 ```
-MATCH ()-[r]->()  
+MATCH ()-[r]->()
 RETURN DISTINCT type( r)
 ```
 
@@ -196,6 +197,7 @@ Can you find out which actors played in movies directed by Ron Howard?
 Tip: `()-[]->()<-[]-()`
 
 ### 5. CrUD
+
 We've matched (read) some things now. But we'd like to give you a quick introduction in how you can create, update and delete entities in Neo4j.
 
 **Create all the things**
@@ -211,44 +213,61 @@ This can be cumbersome at times, in which case the `MERGE` statement is a good r
 **Update entities**
 TODO
 
-### 6. Add new reviewers
+# Recommendations
 
-First find out what properties reviewers have. Note that reviewers are of type Person.
+We're going to add some more data to the database before we move on with some exercises concerning recommendations.
 
-Write a query that:
+Start by adding more reviewers that give some of the movies a random rating:
 
-- Creates 20 new reviewers with a unique name and has 40% chance to create a random rating from each reviewer to a movie. Make sure to add yourself as a reviewer.
+```
+MATCH (m:Movie)
+UNWIND ["Russel Ellis","Ken Chambers","Della Peterson","Norma Harper","Tyrone Butler","Sam Stewart","Christina Waters","Edwin Warren","Meredith Moran","Jo Porter","Santiago Erickson","Darryl Gonzalez","Tabitha Goodman","Wilbert Clayton","Troy Allen","Bill Barker","Sherman Pena","Nicolas Reynolds","Brittany Grant","Juan Welch"] as name
+MERGE (p1:Person {name:name})
+FOREACH(ignoreMe IN CASE WHEN (rand() > 0.6) THEN [1] ELSE [] END |
+    MERGE (p1)-[:REVIEWED {rating: toInteger(rand()*100)}]->(m)
+)
+RETURN p1,m
+```
 
-  Tip: use `UNWIND` to loop over an array of names `["John Doe", "Jane Doe"]`
+Then let some reviewers follow other reviewers:
 
-  and use `FOREACH(ignoreMe IN CASE WHEN {{your condition}} THEN [1] ELSE [] END | {{your query here}})`
+```
+MATCH (p1:Person)-[:REVIEWED]->(:Movie)<-[:REVIEWED]-(p2:Person)
+WITH DISTINCT p1,p2
+FOREACH(ignoreMe IN CASE WHEN (rand() > 0.5) THEN [1] ELSE [] END |
+    MERGE (p1)-[:FOLLOWS]->(p2)
+)
+RETURN *
+```
 
-- Has 25% chance to create a :FOLLOWS relationship from each reviewer to another reviewer
-- Adds a born property with a random birth year to each reviewer
+And finally add a born property to every reviewer:
+
+```
+MATCH (p:Person)-[:REVIEWED]->(m:Movie)
+SET p.born = toInteger(rand() * 50) + 1950
+RETURN *
+```
 
 ### 7. Reviewer recommendations: second-degree contacts
 
-Can you write a query that recommends 10 reviewers that are being followed by reviewers that you are following? These are reviewers you might know or might want to get to know. (Your name should be in the database after completing the previous assignment)
+Now we're going to recommend some reviewers for Norma Harper to start following.
+Write a query that returns 10 reviewers that are being followed by reviewers that Norma Harper is following. These are reviewers she might know or might want to get to know.
 
-Save this query somewhere for later
+### 8. Reviewer recommendations: similar age
 
-### 8. Reviewer recommendations: similar movie ratings
+Now let's find the first 10 reviewers with an age closest to Norma Harper.
 
-Find out which reviewer gives the most similar movie ratings to you. Please return the first 10 results for this one too. Save this query somewhere for later
+### 9. Reviewer recommendations: similar movie ratings
 
-If you want to give some weight to the count of reviewed movies you could roll your own averaging function using `sum()` and `count()`. Otherwise, just use `avg()`
+Find out which reviewer gives the most similar movie ratings to "Norma Harper". Please return the first 10 results for this one too.
 
-### 9. Reviewer recommendations: similar age
+Note that Russel Ellis might have more rated movies in common with Norma Harper than Sam Stewart. It's perfectly fine to use `avg()` for this exercise. If you wanted to take the count of movies into account you could roll your own averaging function instead.
 
-Since you completed the other recommendation queries this one shouldn't be too hard. Let's find the first 10 reviewers with an age closest to you.
+### 10. Movie recommendations: movies that reviewers around Norma's age like
 
-Tip: save this query somewhere for later
+From recommending reviewers to recommending movies. Please find the ten best rated movies for the reviewers that were born closest to Norma Harper's birth year.
 
-### 10. Movie recommendations: movies that reviewers around your age like
-
-From recommending reviewers to recommending movies. Please find the ten best rated movies for the reviewers that were born closest to your birth year.
-
-### 11. Movie recommendations: best rated movie for the genre you like the best
+### 11. Movie recommendations: best rated movie for the genre Norma likes best
 
 First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based on the mapping you can find in the [movie-genres.json](movie-genres.json).
 
@@ -264,7 +283,7 @@ MERGE (m)-[:IN_GENRE]->(g)
 RETURN m,g
 ```
 
-Now write a query that returns the 10 best rated movies for the genre you like best. Like in exercise 3 you can use `avg()` or write an average function yourself.
+Now write a query that returns the 10 best rated movies for the genre Norma Harper likes best. Like in exercise 8 you can use `avg()` or write an average function yourself.
 
 ### 12. Recommendations: Pearson algorithm
 
