@@ -265,11 +265,12 @@ Now let's find the first 10 reviewers with an age closest to Norma Harper which 
 
 Find out which reviewer gives the most similar movie ratings to "Norma Harper". Please return the first 10 results for this one too.
 
-Note that Russel Ellis might have more rated movies in common with Norma Harper than Sam Stewart. It's perfectly fine to use `avg()` for this exercise. If you wanted to take the count of movies into account you could roll your own averaging function instead.
+Note that Russel Ellis might have more rated movies in common with Norma Harper than Sam Stewart. It's perfectly fine to use `avg()` for this exercise. 
+But if you want to take the number of movies into account you could roll your own averaging function instead.
 
 ### 10. Movie recommendations: movies that reviewers around Norma's age like
 
-From recommending reviewers to recommending movies. Please find the ten best rated movies for the reviewers that were born closest to Norma Harper's birth year.
+Find the 10 best rated Movies which were reviewed by reviewers were born closest to Norma Harper's birth year.
 
 ### 11. Movie recommendations: best rated movie for the genre Norma likes best
 
