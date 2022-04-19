@@ -34,9 +34,8 @@ explaination
 - A casual environment where learning and programming is a core theme;
 - We're by no means experts on the subject, but we've done some research in order to give you this dojo. We'd like to share our thoughts and experiences with you.
 
-## Chapter one: Basic concepts and queries
 
-### Neo4j's basic components
+## Basic concepts and queries
 
 Graph databases have no concepts of tables, records or foreign keys. Instead labels, nodes and relationships are uses which resemble these concepts somewhat. Let's take a look at them:
 
@@ -55,7 +54,7 @@ Nodes are the entities in the graph.
 - Nodes can have any number or type of relationships without sacrificing performance.
 - Although relationships are always directed, they can be navigated efficiently in any direction.
 
-### The query language: Cypher
+## The query language: Cypher
 
 The Cypher query language is quite intuitive, as it visually resembles the components of your query.
 
@@ -212,9 +211,7 @@ This can be cumbersome at times, in which case the `MERGE` statement is a good r
 **Update entities**
 TODO
 
-## Chapter Two: Recommendations
-
-### 1. Add new reviewers
+### 6. Add new reviewers
 
 First find out what properties reviewers have. Note that reviewers are of type Person.
 
@@ -229,39 +226,39 @@ Write a query that:
 - Has 25% chance to create a :FOLLOWS relationship from each reviewer to another reviewer
 - Adds a born property with a random birth year to each reviewer
 
-### 2. Reviewer recommendations: second-degree contacts
+### 7. Reviewer recommendations: second-degree contacts
 
 Can you write a query that recommends 10 reviewers that are being followed by reviewers that you are following? These are reviewers you might know or might want to get to know. (Your name should be in the database after completing the previous assignment)
 
 Save this query somewhere for later
 
-### 3. Reviewer recommendations: similar movie ratings
+### 8. Reviewer recommendations: similar movie ratings
 
 Find out which reviewer gives the most similar movie ratings to you. Please return the first 10 results for this one too. Save this query somewhere for later
 
 If you want to give some weight to the count of reviewed movies you could roll your own averaging function using `sum()` and `count()`. Otherwise, just use `avg()`
 
-### 4. Reviewer recommendations: similar age
+### 9. Reviewer recommendations: similar age
 
 Since you completed the other recommendation queries this one shouldn't be too hard. Let's find the first 10 reviewers with an age closest to you.
 
 Tip: save this query somewhere for later
 
-### 5. Movie recommendations: movies that reviewers around your age like
+### 10. Movie recommendations: movies that reviewers around your age like
 
 From recommending reviewers to recommending movies. Please find the ten best rated movies for the reviewers that were born closest to your birth year.
 
-### 6. Movie recommendations: best rated movie for the genre you like the best
+### 11. Movie recommendations: best rated movie for the genre you like the best
 
-First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based on the mapping you can find [here](/movie-genres.json).
+First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based on the mapping you can find in the [movie-genres.json](movie-genres.json).
 
 Run
 
 ```
-CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/feature/recommendations/movie-genres.json?token=GHSAT0AAAAAABPKD3ICS35FT2FSYE7AWPPUYS37MSQ")
-YIELD value
-MATCH (m:Movie {title: value.title})
-UNWIND value.genre as genre
+CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/main/movie-genres.json?token=GHSAT0AAAAAABPKD3ICS35FT2FSYE7AWPPUYS37MSQ")
+YIELD movieWithGenre
+MATCH (m:Movie {title: movieWithGenre.title})
+UNWIND movieWithGenre.genre as genre
 MERGE (g:Genre {name: genre})
 MERGE (m)-[:IN_GENRE]->(g)
 RETURN m,g
@@ -269,13 +266,13 @@ RETURN m,g
 
 Now write a query that returns the 10 best rated movies for the genre you like best. Like in exercise 3 you can use `avg()` or write an average function yourself.
 
-### 7. Recommendations: Pearson algorithm
+### 12. Recommendations: Pearson algorithm
 
 Let's work with another dataset that enables us to use the Graph Data Science library. Open a new [sandbox](https://sandbox.neo4j.com/) named "Recommendations". It's similar to the movie dataset we have been using.
 
 Now try to find users (nodeLabel: `Users`) most similar to "Cynthia Freeman" based on their movie ratings (relationshipType: `RATED`). But this time use the [`gds.similarity.pearson` algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/). This algorithm is particularly well-suited for product recommendations because it takes into account the fact that different users will have different mean ratings: on average some users will tend to give higher ratings than others. Since Pearson similarity considers differences about the mean, this metric will account for these discrepancies.
 
-### 8. Recommendations: Similar movies based on multiple criteria
+### 13. Recommendations: Similar movies based on multiple criteria
 
 Now let's find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.
 
