@@ -1,0 +1,107 @@
+[
+  {
+    "title": "The Matrix",
+    "genre": ["Science fiction", "Action", "Adventure", "Fantasy"]
+  },
+  {
+    "title": "The Matrix Reloaded",
+    "genre": ["Science fiction", "Action", "Adventure", "Fantasy"]
+  },
+  {
+    "title": "The Matrix Revolutions",
+    "genre": ["Science fiction", "Action", "Adventure", "Fantasy"]
+  },
+  {
+    "title": "The Devil's Advocate",
+    "genre": ["Horror", "Thriller", "Fantasy", "Mystery"]
+  },
+  { "title": "A Few Good Men", "genre": ["Crime", "Thriller", "Mystery"] },
+  { "title": "Top Gun", "genre": ["Action", "Romance", "Drama"] },
+  {
+    "title": "Jerry Maguire",
+    "genre": ["Romance", "Comedy", "Drama", "Sports"]
+  },
+  { "title": "Stand By Me", "genre": ["Drama", "Comedy", "Adventure"] },
+  { "title": "As Good as It Gets", "genre": ["Comedy", "Romance", "Drama"] },
+  {
+    "title": "What Dreams May Come",
+    "genre": ["Romance", "Drama", "Fantasy"]
+  },
+  {
+    "title": "Snow Falling on Cedars",
+    "genre": ["Romance", "Thriller", "Drama", "Crime", "Mystery"]
+  },
+  { "title": "You've Got Mail", "genre": ["Romance", "Comedy", "Drama"] },
+  { "title": "Sleepless in Seattle", "genre": ["Romance", "Comedy", "Drama"] },
+  {
+    "title": "Joe Versus the Volcano",
+    "genre": ["Romance", "Comedy", "Fantasy"]
+  },
+  { "title": "When Harry Met Sally", "genre": ["Romance", "Comedy", "Drama"] },
+  { "title": "That Thing You Do", "genre": ["Musical", "Comedy", "Drama"] },
+  {
+    "title": "The Replacements",
+    "genre": ["Action", "Comedy", "Sports", "Adventure"]
+  },
+  { "title": "RescueDawn", "genre": ["Action", "War", "Drama", "Adventure"] },
+  { "title": "The Birdcage", "genre": ["Comedy"] },
+  { "title": "Unforgiven", "genre": ["Western", "Drama"] },
+  {
+    "title": "Johnny Mnemonic",
+    "genre": ["Action", "Science fiction", "Cyberpunk", "Thriller"]
+  },
+  {
+    "title": "Cloud Atlas",
+    "genre": ["Action", "Science fiction", "Adventure", "Drama"]
+  },
+  { "title": "The Da Vinci Code", "genre": ["Thriller", "Mystery", "Crime"] },
+  {
+    "title": "V for Vendetta",
+    "genre": ["Action", "Science fiction", "Mystery", "Thriller", "Drama"]
+  },
+  {
+    "title": "Speed Racer",
+    "genre": ["Action", "Comedy", "Science fiction", "Sports"]
+  },
+  {
+    "title": "Ninja Assassin",
+    "genre": ["Action", "Martial arts", "Thriller", "Crime"]
+  },
+  {
+    "title": "The Green Mile",
+    "genre": ["Mystery", "Fantasy", "Drama", "Crime"]
+  },
+  { "title": "Frost/Nixon", "genre": ["Drama"] },
+  {
+    "title": "Hoffa",
+    "genre": ["Maffia", "Thriller", "Drama", "Mystery", "Crime"]
+  },
+  { "title": "Apollo 13", "genre": ["Adventure", "Drama"] },
+  { "title": "Twister", "genre": ["Adventure", "Action", "Thriller", "Drama"] },
+  { "title": "Cast Away", "genre": ["Adventure", "Romance", "Drama"] },
+  { "title": "One Flew Over the Cuckoo's Nest", "genre": ["Comedy", "Drama"] },
+  {
+    "title": "Something's Gotta Give",
+    "genre": ["Comedy", "Romance", "Drama"]
+  },
+  {
+    "title": "Bicentennial Man",
+    "genre": [
+      "Romance",
+      "Comedy",
+      "Science fiction",
+      "Fantasy",
+      "Drama",
+      "Children"
+    ]
+  },
+  { "title": "Charlie Wilson's War", "genre": ["Comedy", "Drama"] },
+  {
+    "title": "The Polar Express",
+    "genre": ["Adventure", "Fantasy", "Musical", "Children"]
+  },
+  {
+    "title": "A League of Their Own",
+    "genre": ["Comedy", "Children", "Sports"]
+  }
+]
