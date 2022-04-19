@@ -40,6 +40,23 @@ SET m.tagline = 'Life, liberty and the pursuit of vengeance.'
 RETURN m
 ```
 
+```
+MATCH (m:Movie {title: "Django Unchained"})
+MATCH (a:Person {name: "Keanu Reeves"})
+MERGE (a)-[:ACTED_IN]->(m)
+RETURN a,m
+```
+
+```
+MATCH (a:Person {name: "Keanu Reeves"})-[r:ACTED_IN]->(m:Movie {title: "Django Unchained"})
+DELETE r
+RETURN a,m
+```
+
+```
+MATCH (m:Movie {title: "Django Unchained"}) DETACH DELETE m
+```
+
 ### 7. Reviewer recommendations: second-degree contacts
 
 ```

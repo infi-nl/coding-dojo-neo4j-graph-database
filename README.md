@@ -203,9 +203,7 @@ You can create multiple nodes and relationships with the `CREATE` keyword. But y
 Maybe you want update the properties of a node or relationship. You can do this by matching the pattern you want to find and using the `SET` keyword to add, remove, or update properties.
 Add the movies' tagline "Life, liberty and the pursuit of vengeance." to the "Django Unchained" movie node, using the `SET` keyword.
 
-We can also use `MERGE` to link an existing actor to our new movie. Create an `ACTED_IN` relationship between "Keanu Reeves" and "Django Unchained".
-
-note that when you use `CREATE` you can add multiple identical relationships to the same node.
+We can also use `MERGE` instead of `CREATE` to link an existing actor to our new movie. Create an `ACTED_IN` relationship between "Keanu Reeves" and "Django Unchained". What's unique about `MERGE` is that it will create a node if doesn't exist yet, otherwise it will match (read) the existing node. Also note that when you use `CREATE` you can add multiple identical relationships to the same node. That's why we'll prefer to use `MERGE` instead of `CREATE` moving forward.
 
 **Delete entities**
 Foolish! Let's delete that relationship!
@@ -269,7 +267,7 @@ But if you want to take the number of movies into account you could roll your ow
 
 ### 10. Movie recommendations: movies that reviewers around Norma's age like
 
-Find the 10 best rated Movies which were reviewed by reviewers were born closest to Norma Harper's birth year.
+Find the 10 best rated Movies which were reviewed by reviewers that were born closest to Norma Harper's birth year.
 
 ### 11. Movie recommendations: best rated movie for the genre Norma likes best
 
@@ -287,7 +285,7 @@ MERGE (m)-[:IN_GENRE]->(g)
 RETURN m,g
 ```
 
-Now write a query that returns the 10 best rated movies for the genre Norma Harper likes best. Like in exercise 8 you can use `avg()` or write an average function yourself.
+Now write a query that returns the 10 best rated movies for the genre Norma Harper likes best. Like in exercise 8 you can use `avg()` or write an average function yourself to also take into account how many movies per genre are found.
 
 ### 12. Recommendations: Pearson algorithm
 
