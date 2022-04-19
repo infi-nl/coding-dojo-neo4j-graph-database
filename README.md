@@ -235,9 +235,10 @@ RETURN p1,m
 Then let some reviewers follow other reviewers:
 
 ```
-MATCH (p1:Person)-[:REVIEWED]->(:Movie)<-[:REVIEWED]-(p2:Person)
+MATCH (p1:Person)-[:REVIEWED]->(:Movie), (p2:Person)-[:REVIEWED]->(:Movie)
+WHERE p1 <> p2
 WITH DISTINCT p1,p2
-FOREACH(ignoreMe IN CASE WHEN (rand() > 0.5) THEN [1] ELSE [] END |
+FOREACH(ignoreMe IN CASE WHEN (rand() > 0.75) THEN [1] ELSE [] END |
     MERGE (p1)-[:FOLLOWS]->(p2)
 )
 RETURN *
@@ -246,9 +247,9 @@ RETURN *
 And finally add a born property to every reviewer:
 
 ```
-MATCH (p:Person)-[:REVIEWED]->(m:Movie)
+MATCH (p:Person)-[:REVIEWED]->(:Movie)
 SET p.born = toInteger(rand() * 50) + 1950
-RETURN *
+RETURN p          
 ```
 
 ### 7. Reviewer recommendations: second-degree contacts
