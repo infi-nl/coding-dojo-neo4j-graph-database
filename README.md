@@ -259,7 +259,7 @@ Write a query that returns 10 reviewers that are being followed by reviewers tha
 
 ### 8. Reviewer recommendations: similar age
 
-Now let's find the first 10 reviewers with an age closest to Norma Harper.
+Now let's find the first 10 reviewers with an age closest to Norma Harper which have reviewed the same movies as she.
 
 ### 9. Reviewer recommendations: similar movie ratings
 
