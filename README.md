@@ -6,26 +6,22 @@ Neo4j is a native graph database. It's a No-SQL database which focuses on storin
 
 The benefits compared to other databases are more noticeable when the data and query complexity increase.
 
-**TODO a small example problem here?**
+It can save millions if you want to [travel to Mars 🚀](https://neo4j.com/users/nasa/)
 
-You can find more detailed information at the Neo4j website: https://neo4j.com/developer/graph-database.
+You can find more detailed information at the Neo4j website: [https://neo4j.com/developer/graph-database](https://neo4j.com/developer/graph-database).
 
 ### What will you learn in this dojo?
 
 - You'll learn about basic concepts, such as _nodes_, _Labels_ and _relationships_.
 - We'll do some simple queries to get you started with _Cypher_, the query language Neo4j uses.
-- After this basic introduction you'll can chose one of the following paths:
-  - OR: Build an application in node/C# (**TODO**) with neo4j
-  - OR: Dive in the world of algorithms to find more complex relations
+- Afterwards we'll show you some more useful problems to solve
+- If you have time left you can dive into the world of algorithms
 
 ### What do we expect from you?
 
 Not much!
-explaination
-
 - But at least a basic understanding about databases.
 - Make sure you've a Neo4j account so you can use the free [sandbox environment](https://sandbox.neo4j.com/)
-- If you want to get started with building a node/C# you'll need an environment (**TODO**).
 - We'd also love to hear your opinion on the subject during this evening.
 
 ### What can you expect from us?
@@ -220,13 +216,13 @@ note that when  you use `CREATE` you can add multiple identical relationships to
 
 **Delete entities**
 Foolish! Let's delete that relationship!
-Match the *relationship*  and delete it using the `DELETE` statement.
+Match the _relationship_  and delete it using the `DELETE` statement.
 
 Now delete our new Movie.
 
 You might have seen that you can't delete nodes that still have relationships. You could delete every relationship. But it's quicker to use `DETACH DELETE`. Please try it!
 
-# Recommendations
+## Recommendations
 
 We're going to add some more data to the database before we move on with some exercises concerning recommendations.
 
