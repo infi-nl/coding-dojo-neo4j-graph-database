@@ -44,6 +44,7 @@ RETURN m
 
 ```
 MATCH (p1:Person {name: "Norma Harper"})-[:FOLLOWS]->(p2:Person)<-[:FOLLOWS]-(p3:Person)
+WHERE NOT (p1)-[:FOLLOWS]->(p3)
 RETURN p3
 LIMIT 10
 ```

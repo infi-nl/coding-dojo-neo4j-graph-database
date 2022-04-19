@@ -6,33 +6,24 @@ Neo4j is a native graph database. It's a No-SQL database which focuses on storin
 
 The benefits compared to other databases are more noticeable when the data and query complexity increase.
 
-**TODO a small example problem here?**
+It can save millions if you want to [travel to Mars 🚀](https://neo4j.com/users/nasa/)
 
-You can find more detailed information at the Neo4j website: https://neo4j.com/developer/graph-database.
+You can find more detailed information at the Neo4j website: [https://neo4j.com/developer/graph-database](https://neo4j.com/developer/graph-database).
 
 ### What will you learn in this dojo?
 
 - You'll learn about basic concepts, such as _nodes_, _Labels_ and _relationships_.
 - We'll do some simple queries to get you started with _Cypher_, the query language Neo4j uses.
-- After this basic introduction you'll can chose one of the following paths:
-  - OR: Build an application in node/C# (**TODO**) with neo4j
-  - OR: Dive in the world of algorithms to find more complex relations
+- Afterwards we'll show you some more useful problems to solve
+- If you have time left you can dive into the world of algorithms
 
 ### What do we expect from you?
 
 Not much!
-explanation
 
 - But at least a basic understanding about databases.
 - Make sure you've a Neo4j account so you can use the free [sandbox environment](https://sandbox.neo4j.com/)
-- If you want to get started with building a node/C# you'll need an environment (**TODO**).
 - We'd also love to hear your opinion on the subject during this evening.
-
-### What can you expect from us?
-
-- For starters pizza, beer and other drinks.
-- A casual environment where learning and programming is a core theme;
-- We're by no means experts on the subject, but we've done some research in order to organise you this dojo. We'd like to share our thoughts and experiences with you.
 
 ## Basic concepts and queries
 
@@ -243,9 +234,10 @@ RETURN p1,m
 Then let some reviewers follow other reviewers:
 
 ```
-MATCH (p1:Person)-[:REVIEWED]->(:Movie)<-[:REVIEWED]-(p2:Person)
+MATCH (p1:Person)-[:REVIEWED]->(:Movie), (p2:Person)-[:REVIEWED]->(:Movie)
+WHERE p1 <> p2
 WITH DISTINCT p1,p2
-FOREACH(ignoreMe IN CASE WHEN (rand() > 0.5) THEN [1] ELSE [] END |
+FOREACH(ignoreMe IN CASE WHEN (rand() > 0.75) THEN [1] ELSE [] END |
     MERGE (p1)-[:FOLLOWS]->(p2)
 )
 RETURN *
@@ -254,9 +246,9 @@ RETURN *
 And finally add a born property to every reviewer:
 
 ```
-MATCH (p:Person)-[:REVIEWED]->(m:Movie)
+MATCH (p:Person)-[:REVIEWED]->(:Movie)
 SET p.born = toInteger(rand() * 50) + 1950
-RETURN *
+RETURN p
 ```
 
 ### 7. Reviewer recommendations: second-degree contacts
@@ -266,17 +258,18 @@ Write a query that returns 10 reviewers that are being followed by reviewers tha
 
 ### 8. Reviewer recommendations: similar age
 
-Now let's find the first 10 reviewers with an age closest to Norma Harper.
+Now let's find the first 10 reviewers with an age closest to Norma Harper which have reviewed the same movies as she.
 
 ### 9. Reviewer recommendations: similar movie ratings
 
 Find out which reviewer gives the most similar movie ratings to "Norma Harper". Please return the first 10 results for this one too.
 
-Note that Russel Ellis might have more rated movies in common with Norma Harper than Sam Stewart. It's perfectly fine to use `avg()` for this exercise. If you wanted to take the count of movies into account you could roll your own averaging function instead.
+Note that Russel Ellis might have more rated movies in common with Norma Harper than Sam Stewart. It's perfectly fine to use `avg()` for this exercise.
+But if you want to take the number of movies into account you could roll your own averaging function instead.
 
 ### 10. Movie recommendations: movies that reviewers around Norma's age like
 
-From recommending reviewers to recommending movies. Please find the ten best rated movies for the reviewers that were born closest to Norma Harper's birth year.
+Find the 10 best rated Movies which were reviewed by reviewers were born closest to Norma Harper's birth year.
 
 ### 11. Movie recommendations: best rated movie for the genre Norma likes best
 
