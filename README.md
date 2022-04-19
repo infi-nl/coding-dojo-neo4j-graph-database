@@ -21,7 +21,7 @@ You can find more detailed information at the Neo4j website: https://neo4j.com/d
 ### What do we expect from you?
 
 Not much!
-explaination
+explanation
 
 - But at least a basic understanding about databases.
 - Make sure you've a Neo4j account so you can use the free [sandbox environment](https://sandbox.neo4j.com/)
@@ -32,11 +32,11 @@ explaination
 
 - For starters pizza, beer and other drinks.
 - A casual environment where learning and programming is a core theme;
-- We're by no means experts on the subject, but we've done some research in order to give you this dojo. We'd like to share our thoughts and experiences with you.
+- We're by no means experts on the subject, but we've done some research in order to organise you this dojo. We'd like to share our thoughts and experiences with you.
 
 ## Basic concepts and queries
 
-Graph databases have no concepts of tables, records or foreign keys. Instead labels, nodes and relationships are uses which resemble these concepts somewhat. Let's take a look at them:
+Graph databases have no concepts of tables, records or foreign keys. Instead labels, nodes and relationships are used which resemble these concepts somewhat. Let's take a look at them:
 
 **Nodes**
 
@@ -70,7 +70,7 @@ MATCH (n1)-->(n2)
 RETURN n1, n2
 ```
 
-This will return all nodes that have a relationship which each other. Fun, but not very useful.
+This will return all nodes that have a relationship to each other. Fun, but not very useful.
 
 **Query by property**
 
@@ -90,39 +90,39 @@ Return n2
 
 **Query by label**
 
-Besides properties, nodes can have labels. These are a bit similar to table names in a sql database. We can use them categorize the different entities in our database. For instance:
+Besides properties, nodes can have labels. These are a bit similar to table names in a sql database. We can use them to categorize the different entities in our database. For instance:
 
 ```
 MATCH (p:Person)-->(b:Book)
 RETURN p,b
 ```
 
-This will return all relationships between persons and books.
+This will return all nodes of label Person that have a relationship with nodes of label Book.
 
 **Query by relationship**
 
-We know how to query relationships between certain object now. But we've no clue what the nature of this relationship is. Fortunately we can also specify the type of relationship in our query.
+We know how to query relationships between certain object now. But we've got no clue what the nature of this relationship is. Fortunately we can also specify the type of relationship in our query.
 
 ```
-MATCH (p:Person)-[:LOVES]->(m:Movie)
+MATCH (p:Person)-[:REVIEWED]->(m:Movie)
 RETURN p,m
 ```
 
 OR
 
 ```
-MATCH (p:Person)-[:HATES]->(m:Movie)
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
 RETURN p,m
 ```
 
 **Summary**
 
-All this new syntax might be a bit overwhelming. But it's just syntax, so don't worry! Here's a neat little picture which summerizes the basic elements of cypher query. _Make sure you understand all aspects before you continue_ and feel free to ask us for extra explanation.
+All this new syntax might be a bit overwhelming. But it's just syntax, so don't worry! Here's a neat little picture which summarizes the basic elements of cypher query. _Make sure you understand all aspects before you continue_ and feel free to ask us for extra explanation.
 ![cypher-example](cypher-example.png)
 
 ## Try it yourself
 
-Let's get our hands dirty now! Open a new movie db sandbox on [sandbox environment](https://sandbox.neo4j.com/).
+Let's get our hands dirty now! Open a new Movies sandbox on [sandbox environment](https://sandbox.neo4j.com/).
 
 This is a simple graph database filled with some example data to get us started.
 
@@ -131,7 +131,7 @@ This is a simple graph database filled with some example data to get us started.
 Let's explore this database a bit.
 
 **How many movies?**
-Let's find out how many movies there are. We'll use the count function:
+Let's find out how many movies are in this dataset. We'll use the count function:
 
 ```
 MATCH (movies:Movie)
@@ -141,7 +141,7 @@ RETURN count(movies)
 **How many actors?**
 
 That was easy!
-Now we'd like to find out how many actors there are. So we need to expand our MATCH statement:
+Now we'd like to find how many actors are in the database. For that we need to expand our MATCH statement:
 
 ```
 MATCH (actors:Person)-[:ACTED_IN]->(:Movie)
@@ -150,14 +150,14 @@ MATCH (actors:Person)-[:ACTED_IN]->(:Movie)
 Nice! Now we know there are 102 actors!
 Or... wait. Did you get 172?
 
-The sandbox graph ui hides the fact that you query every `ACTED_IN` relation for every actor and movie combination. To prove this run the following query and open the text view of the query result (on the left side).
+The sandbox graph ui hides the fact that you query every `ACTED_IN` relation for every actor and movie combination. To prove this run the following query and click the "Text" tab to the see the results in a text view instead of the graph view (on the left side).
 
 ```
 MATCH (actors:Person)-[:ACTED_IN]->(movies:Movie)
 RETURN actors, movies
 ```
 
-Every relation is queried, and thus counted! Just like a `JOIN` in SQL.
+Every relation is queried and thus counted! Just like a `JOIN` in SQL.
 
 The fix is easy, use the DISTINCT keyword: `RETURN count(DISTINCT actors)`. Now it should return 102.
 
@@ -169,7 +169,7 @@ Tip: you can query all relationship types like this:
 
 ```
 MATCH ()-[r]->()
-RETURN DISTINCT type( r)
+RETURN DISTINCT type(r)
 ```
 
 ### 2. Who acted in The Matrix?
@@ -180,7 +180,7 @@ Tip: use the title property on the Movie nodes. When you query all movies and ho
 
 If you succeeded you might want to find out which other people were involved with The Matrix.
 
-Tip: instead of returning specific variables, you can also use a wildcard: `RETURN *`
+Tip: instead of returning specific variables, you can also use a wildcard and return everything: `RETURN *`
 
 ### 3. Who's Eddie?
 
@@ -188,7 +188,7 @@ This one is a bit tricky!
 
 Please find out which actor played Eddie and in which movie.
 
-Note that relationships can have properties as well, just as nodes. In this case we need to lookup the roles property (Which is an array by the way! Who = `['Eddie']`?)
+Note that relationships can have properties as well, just as nodes. In this case we need to look up the roles property on the ACTED_IN relationship. (Which is an array by the way! Who = `['Eddie']`?)
 
 ### 4. Act like you know how(ard)
 
@@ -208,25 +208,23 @@ Let's add "Quentin Tarantino" as the director. Mind the direction of the relatio
 
 You can create multiple nodes and relationships with the `CREATE` keyword. But you'll get an error if you try to create existing nodes. In this case we need to `MATCH` our movie first and create the director and relationship on that matched movie. Try it!
 
-This can be cumbersome at times, in which case the `MERGE` statement is a good replacement for `CREATE`. It functions as a upsert method, meaning it'll create non existing entities an matches existing entities. Please add the actor Jamie Fox to this movie using the `MERGE` statement only.
-
 **Update entities**
-Maybe you already have a node or relationship in the data, but you want to modify its properties. You can do this by matching the pattern you want to find and using the `SET` keyword to add, remove, or update properties.
-Add the movies' tagline "Life, liberty and the pursuit of vengeance." to its node, using the `SET` keyword.
+Maybe you want update the properties of a node or relationship. You can do this by matching the pattern you want to find and using the `SET` keyword to add, remove, or update properties.
+Add the movies' tagline "Life, liberty and the pursuit of vengeance." to the "Django Unchained" movie node, using the `SET` keyword.
 
 We can also use `MERGE` to link an existing actor to our new movie. Create an `ACTED_IN` relationship between "Keanu Reeves" and "Django Unchained".
 
-note that when  you use `CREATE` you can add multiple identical relationships to the same node.
+note that when you use `CREATE` you can add multiple identical relationships to the same node.
 
 **Delete entities**
 Foolish! Let's delete that relationship!
-Match the *relationship*  and delete it using the `DELETE` statement.
+Match the _relationship_ and delete it using the `DELETE` statement.
 
 Now delete our new Movie.
 
 You might have seen that you can't delete nodes that still have relationships. You could delete every relationship. But it's quicker to use `DETACH DELETE`. Please try it!
 
-# Recommendations
+### 6. Recommendations
 
 We're going to add some more data to the database before we move on with some exercises concerning recommendations.
 

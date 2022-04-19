@@ -1,3 +1,45 @@
+### 1. How many are there?
+
+```
+MATCH (actors:Person)-[:ACTED_IN]->(movies:Movie)
+RETURN count(DISTINCT actors)
+```
+
+### 2. Who acted in The Matrix?
+
+```
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie {title: "The Matrix"})
+RETURN a.name
+```
+
+### 3. Who's Eddie?
+
+```
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE r.roles = ['Eddie']
+RETURN a.name
+```
+
+### 4. Act like you know how(ard)
+
+```
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person {name: "Ron Howard"}) RETURN DISTINCT a
+```
+
+### 5. CrUD
+
+```
+MATCH (m:Movie {title: "Django Unchained"})
+CREATE (p:Person {name: "Quentin Tarantino"})-[:DIRECTED]->(m)
+RETURN m,p
+```
+
+```
+MATCH (m:Movie {title: "Django Unchained"})
+SET m.tagline = 'Life, liberty and the pursuit of vengeance.'
+RETURN m
+```
+
 ### 7. Reviewer recommendations: second-degree contacts
 
 ```
