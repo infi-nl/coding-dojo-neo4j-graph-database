@@ -211,7 +211,20 @@ You can create multiple nodes and relationships with the `CREATE` keyword. But y
 This can be cumbersome at times, in which case the `MERGE` statement is a good replacement for `CREATE`. It functions as a upsert method, meaning it'll create non existing entities an matches existing entities. Please add the actor Jamie Fox to this movie using the `MERGE` statement only.
 
 **Update entities**
-TODO
+Maybe you already have a node or relationship in the data, but you want to modify its properties. You can do this by matching the pattern you want to find and using the `SET` keyword to add, remove, or update properties.
+Add the movies' tagline "Life, liberty and the pursuit of vengeance." to its node, using the `SET` keyword.
+
+We can also use `MERGE` to link an existing actor to our new movie. Create an `ACTED_IN` relationship between "Keanu Reeves" and "Django Unchained".
+
+note that when  you use `CREATE` you can add multiple identical relationships to the same node.
+
+**Delete entities**
+Foolish! Let's delete that relationship!
+Match the *relationship*  and delete it using the `DELETE` statement.
+
+Now delete our new Movie.
+
+You might have seen that you can't delete nodes that still have relationships. You could delete every relationship. But it's quicker to use `DETACH DELETE`. Please try it!
 
 # Recommendations
 
