@@ -24,12 +24,6 @@ Not much!
 - Make sure you've a Neo4j account so you can use the free [sandbox environment](https://sandbox.neo4j.com/)
 - We'd also love to hear your opinion on the subject during this evening.
 
-### What can you expect from us?
-
-- For starters pizza, beer and other drinks.
-- A casual environment where learning and programming is a core theme;
-- We're by no means experts on the subject, but we've done some research in order to give you this dojo. We'd like to share our thoughts and experiences with you.
-
 ## Basic concepts and queries
 
 Graph databases have no concepts of tables, records or foreign keys. Instead labels, nodes and relationships are uses which resemble these concepts somewhat. Let's take a look at them:
