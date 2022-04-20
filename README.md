@@ -268,6 +268,7 @@ But if you want to take the number of movies into account you could roll your ow
 ### 10. Movie recommendations: movies that reviewers around Norma's age like
 
 Find the 10 best rated Movies which were reviewed by reviewers that were born closest to Norma Harper's birth year.
+You might want to use the `WITH` keyword to pass variables to other parts of the query.
 
 ### 11. Movie recommendations: best rated movie for the genre Norma likes best
 
@@ -276,8 +277,8 @@ First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based o
 Run
 
 ```
-CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/main/movie-genres.json?token=GHSAT0AAAAAABPKD3ICS35FT2FSYE7AWPPUYS37MSQ")
-YIELD movieWithGenre
+CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/8ccd936fb815db4fb80a7c09f8c12371f19762a7/movie-genres.json?token=GHSAT0AAAAAABQWDIRTR6EMGKNUSNIT2TVSYS737DA")
+YIELD value as movieWithGenre
 MATCH (m:Movie {title: movieWithGenre.title})
 UNWIND movieWithGenre.genre as genre
 MERGE (g:Genre {name: genre})
@@ -291,28 +292,38 @@ Now write a query that returns the 10 best rated movies for the genre Norma Harp
 
 Let's work with another dataset that enables us to use the Graph Data Science library. Open a new [sandbox](https://sandbox.neo4j.com/) named "Recommendations". It's similar to the movie dataset we have been using.
 
-Now try to find users (nodeLabel: `Users`) most similar to "Cynthia Freeman" based on their movie ratings (relationshipType: `RATED`). But this time use the [`gds.similarity.pearson` algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/). This algorithm is particularly well-suited for product recommendations because it takes into account the fact that different users will have different mean ratings: on average some users will tend to give higher ratings than others. Since Pearson similarity considers differences about the mean, this metric will account for these discrepancies.
+Now try to find users (nodeLabel: `User`) most similar to "Cynthia Freeman" based on their movie ratings (relationshipType: `RATED`). But this time use the [`gds.similarity.pearson` algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/). This algorithm is particularly well-suited for product recommendations because it takes into account the fact that different users will have different mean ratings: on average some users will tend to give higher ratings than others. Since Pearson similarity considers differences about the mean, this metric will account for these discrepancies.
 
 ### 13. Recommendations: Similar movies based on multiple criteria
 
 Now let's find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.
 
-First you'll have to use the Graph Data Science library to normalize these properties. Otherwise one property could have more weight in the similarity algorithm. Run the following queries sequentially to normalize the properties.
+Before we can compare these different properties we need to put them on the same scale. This process is called normalization.
+The goal of normalization is to change the values of numeric columns in the dataset to a common scale, without distorting differences in the ranges of values.
 
+We'll use the Neo4j Graph Data Science library to normalize these properties. 
+Run the following queries sequentially to normalize the properties.
+
+First we create a new graph projection.
+A projected graph can be stored in the catalog under a user-defined name. Using that name, the graph can be referred to by any algorithm in the library. This allows multiple algorithms to use the same graph without having to project it on each algorithm run.
+You can find more information here: [https://neo4j.com/docs/graph-data-science/current/graph-project/]
 ```
 CALL gds.graph.project("movieGraph", [{Movie: {properties: ["budget", "imdbRating", "revenue", "year"]}}], "*")
 ```
 
+Now we'll normalize each property using the MinMax scaler. This will convert the values of each property to a range reaching from 0 to 1.
 ```
 CALL gds.alpha.scaleProperties.mutate("movieGraph", {nodeProperties: ["budget", "imdbRating", "revenue", "year"], scaler: "MinMax", mutateProperty: "scaledProperties"})
 YIELD nodePropertiesWritten
 ```
+Note that you can change the scaler and choose one depending on the distribution of your data. For more information about scaling data see [https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/scale-properties]
 
+Finally we'll write the scaledProperties form our temporary algorithm graph to our actual database.
 ```
 CALL gds.graph.writeNodeProperties("movieGraph", ["scaledProperties"])
 ```
 
-Note that you can change the scaler and choose one depending on the distribution of your data.
-If all went well you will have created a scaledProperties property on the Movie node. Go and see what it looks like.
+If all went well you will have created a scaledProperties property on the Movie node. Go and see what it looks like
+
 
 Now you can actually write the query. Use the [gds.similarity.euclideanDistance algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/) to find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.

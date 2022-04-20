@@ -100,7 +100,7 @@ LIMIT 10
 ### 11. Movie recommendations: best rated movie for the genre you like the best
 
 ```
-MATCH (p1:Person {name: "Norma Harper"})-[r1:REVIEWED]->(m1:Movie)-[:IN_GENRE]->(g:GENRE)
+MATCH (p1:Person {name: "Norma Harper"})-[r1:REVIEWED]->(m1:Movie)-[:IN_GENRE]->(g:Genre)
 WITH p1,g,sum(r1.rating) / sqrt(count(m1)) as genreRating
 ORDER BY genreRating DESC
 LIMIT 1
