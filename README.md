@@ -92,7 +92,7 @@ This will return all nodes of label Person that have a relationship with nodes o
 
 **Query by relationship**
 
-We know how to query relationships between certain object now. But we've got no clue what the nature of this relationship is. Fortunately we can also specify the type of relationship in our query.
+We know how to query relationships between certain objects now. But we've got no clue what the nature of this relationship is. Fortunately we can also specify the type of relationship in our query.
 
 ```
 MATCH (p:Person)-[:REVIEWED]->(m:Movie)
