@@ -304,7 +304,8 @@ The goal of normalization is to change the values of numeric columns in the data
 We'll use the Neo4j Graph Data Science library to normalize these properties. 
 Run the following queries sequentially to normalize the properties.
 
-First we create a new graph projection.
+First we create a new graph projection. This is an in-memory copy of the database, which can be used to mutate the data for analytic purposes.
+
 A projected graph can be stored in the catalog under a user-defined name. Using that name, the graph can be referred to by any algorithm in the library. This allows multiple algorithms to use the same graph without having to project it on each algorithm run.
 You can find more information here: [https://neo4j.com/docs/graph-data-science/current/graph-project/]
 ```
