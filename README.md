@@ -179,7 +179,7 @@ This one is a bit tricky!
 
 Please find out which actor played Eddie and in which movie.
 
-Note that relationships can have properties as well, just as nodes. In this case we need to look up the roles property on the ACTED_IN relationship. (Which is an array by the way! Who = `['Eddie']`?)
+Note that relationships can have properties as well, just as nodes. In this case we need to look up the roles property on the ACTED_IN relationship. (Which is an array by the way!)
 
 ### 4. Act like you know how(ard)
 

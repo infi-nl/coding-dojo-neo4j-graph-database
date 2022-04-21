@@ -16,7 +16,7 @@ RETURN a.name
 
 ```
 MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
-WHERE r.roles = ['Eddie']
+WHERE 'Eddie' IN r.roles
 RETURN a.name
 ```
 
