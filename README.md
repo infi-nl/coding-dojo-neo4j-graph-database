@@ -277,7 +277,7 @@ First add Genre nodes with an `IN_GENRE` relationship to all movie nodes based o
 Run
 
 ```
-CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/8ccd936fb815db4fb80a7c09f8c12371f19762a7/movie-genres.json?token=GHSAT0AAAAAABQWDIRTR6EMGKNUSNIT2TVSYS737DA")
+CALL apoc.load.json("https://raw.githubusercontent.com/infi-nl/dojo-neo4j-graph-database/8ccd936fb815db4fb80a7c09f8c12371f19762a7/movie-genres.json")
 YIELD value as movieWithGenre
 MATCH (m:Movie {title: movieWithGenre.title})
 UNWIND movieWithGenre.genre as genre
@@ -301,30 +301,33 @@ Now let's find the 10 most similar movies to "Matrix, The" based on budget, imdb
 Before we can compare these different properties we need to put them on the same scale. This process is called normalization.
 The goal of normalization is to change the values of numeric columns in the dataset to a common scale, without distorting differences in the ranges of values.
 
-We'll use the Neo4j Graph Data Science library to normalize these properties. 
+We'll use the Neo4j Graph Data Science library to normalize these properties.
 Run the following queries sequentially to normalize the properties.
 
 First we create a new graph projection. This is an in-memory copy of the database, which can be used to mutate the data for analytic purposes.
 
 A projected graph can be stored in the catalog under a user-defined name. Using that name, the graph can be referred to by any algorithm in the library. This allows multiple algorithms to use the same graph without having to project it on each algorithm run.
 You can find more information here: [https://neo4j.com/docs/graph-data-science/current/graph-project/]
+
 ```
 CALL gds.graph.project("movieGraph", [{Movie: {properties: ["budget", "imdbRating", "revenue", "year"]}}], "*")
 ```
 
 Now we'll normalize each property using the MinMax scaler. This will convert the values of each property to a range reaching from 0 to 1.
+
 ```
 CALL gds.alpha.scaleProperties.mutate("movieGraph", {nodeProperties: ["budget", "imdbRating", "revenue", "year"], scaler: "MinMax", mutateProperty: "scaledProperties"})
 YIELD nodePropertiesWritten
 ```
+
 Note that you can change the scaler and choose one depending on the distribution of your data. For more information about scaling data see [https://neo4j.com/docs/graph-data-science/current/alpha-algorithms/scale-properties]
 
 Finally we'll write the scaledProperties form our temporary algorithm graph to our actual database.
+
 ```
 CALL gds.graph.writeNodeProperties("movieGraph", ["scaledProperties"])
 ```
 
 If all went well you will have created a scaledProperties property on the Movie node. Go and see what it looks like
-
 
 Now you can actually write the query. Use the [gds.similarity.euclideanDistance algorithm](https://neo4j.com/docs/graph-data-science/current/algorithms/similarity-functions/) to find the 10 most similar movies to "Matrix, The" based on budget, imdbRating, revenue and release year.
